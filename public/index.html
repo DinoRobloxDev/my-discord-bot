@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exodus Bot Control Panel</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;500&display=swap');
+        
+        :root {
+            --bg-color: #0d0d0d;
+            --main-accent: #b38b4d;
+            --secondary-accent: #c09f6e;
+            --text-color: #e0e0e0;
+            --faded-text: #6b6b6b;
+            --card-bg: #1a1a1a;
+            --border-color: #333;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(179, 139, 77, 0.1);
+            backdrop-filter: blur(5px);
+            padding: 3rem;
+            position: relative;
+        }
+
+        h1, h2, h4 {
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            color: var(--main-accent);
+            text-shadow: 0 0 5px rgba(179, 139, 77, 0.5);
+        }
+        h1 { font-size: 2.5rem; margin-bottom: 2rem; }
+        h4 { margin-top: 2rem; }
+
+        .nav-tabs {
+            border-bottom: 2px solid var(--border-color);
+            justify-content: center;
+            margin-bottom: 2.5rem;
+        }
+        .nav-tabs .nav-item .nav-link {
+            color: var(--faded-text);
+            background-color: transparent;
+            border: none;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 1rem 1.5rem;
+        }
+        .nav-tabs .nav-item .nav-link.active {
+            color: var(--main-accent);
+            border-bottom-color: var(--main-accent);
+            text-shadow: 0 0 5px rgba(179, 139, 77, 0.5);
+        }
+        .nav-tabs .nav-item .nav-link:hover {
+            color: var(--secondary-accent);
+        }
+
+        .tab-content > .tab-pane {
+            display: none;
+        }
+        .tab-content > .active.show {
+            display: block;
+        }
+
+        form label {
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+            font-weight: 300;
+        }
+        .form-control, .form-select {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            border-radius: 6px;
+            padding: 0.8rem 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--main-accent);
+            box-shadow: 0 0 10px rgba(179, 139, 77, 0.3);
+            outline: none;
+        }
+        .form-select option {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        .btn-primary {
+            background: var(--main-accent);
+            border: none;
+            color: var(--bg-color);
+            font-weight: 700;
+            padding: 0.9rem 2.5rem;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .btn-primary:hover {
+            background: var(--secondary-accent);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .list-group-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            margin-bottom: 0.7rem;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+        .list-group-item:hover {
+            border-color: var(--main-accent);
+            box-shadow: 0 0 8px rgba(179, 139, 77, 0.2);
+        }
+        .list-group-item strong {
+            color: var(--secondary-accent);
+            font-weight: 500;
+        }
+        .list-group-item small {
+            color: var(--faded-text);
+        }
+        
+        .status-container {
+            text-align: center;
+            margin-top: 3rem;
+            font-size: 1.1rem;
+            color: var(--main-accent);
+        }
+        .status-light {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            background-color: var(--main-accent);
+            border-radius: 50%;
+            margin-right: 0.8rem;
+            animation: pulse-glow 2s infinite ease-in-out;
+            vertical-align: middle;
+            box-shadow: 0 0 10px var(--main-accent);
+        }
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 5px var(--main-accent); }
+            50% { box-shadow: 0 0 15px var(--main-accent); }
+            100% { box-shadow: 0 0 5px var(--main-accent); }
+        }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="card p-4">
+            <h1>Exodus Bot Control Panel</h1>
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <button class="nav-link active" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button">General</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button">Bot Profile</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" id="settings-tab" data-bs-toggle="tab" data-bs-target="#settings" type="button">Settings</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" id="commands-tab" data-bs-toggle="tab" data-bs-target="#commands" type="button">Commands</button>
+                </li>
+                 <li class="nav-item">
+                    <button class="nav-link" id="dms-tab" data-bs-toggle="tab" data-bs-target="#dms" type="button">DMs</button>
+                </li>
+            </ul>
+            <div class="tab-content mt-4">
+                <div class="tab-pane fade show active" id="general">
+                    <h2 class="text-center">Welcome, Admin</h2>
+                    <p class="text-center">Your command console is ready. All systems online.</p>
+                    <div class="status-container">
+                        <span class="status-light"></span> Bot Status: Online
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="profile">
+                    <h4>Bot Profile</h4>
+                    <form id="profile-form">
+                        <div class="mb-3">
+                            <label for="avatarURL" class="form-label">Bot Avatar URL:</label>
+                            <input type="text" class="form-control" id="avatarURL" name="avatarURL">
+                        </div>
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Bot Status:</label>
+                            <select class="form-select" id="status" name="status">
+                                <option value="online">Online</option>
+                                <option value="idle">Idle</option>
+                                <option value="dnd">Do Not Disturb</option>
+                                <option value="invisible">Invisible</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="activity" class="form-label">Bot Activity:</label>
+                            <input type="text" class="form-control" id="activity" name="activity" placeholder="e.g., Playing a game, Watching YouTube">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Save Profile</button>
+                    </form>
+                    <div id="profile-status" class="mt-3 text-center"></div>
+                </div>
+
+                <div class="tab-pane fade" id="settings">
+                    <h4>Server Settings</h4>
+                    <form id="settings-form">
+                        <div class="mb-3">
+                            <label for="welcomeMessage" class="form-label">Welcome Message:</label>
+                            <textarea class="form-control" id="welcomeMessage" name="welcomeMessage" rows="2" placeholder="Welcome, {user}!"></textarea>
+                            <div class="form-text text-muted">Use {user} to mention the new member.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="autoRoleId" class="form-label">Auto-Role ID:</label>
+                            <input type="text" class="form-control" id="autoRoleId" name="autoRoleId">
+                            <div class="form-text text-muted">The ID of the role to assign to new members.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="key" class="form-label">Key Channel ID:</label>
+                            <input type="text" class="form-control" id="key" name="key">
+                        </div>
+                        <div class="mb-3">
+                            <label for="ticket" class="form-label">Ticket Channel ID:</label>
+                            <input type="text" class="form-control" id="ticket" name="ticket">
+                        </div>
+                        <div class="mb-3">
+                            <label for="free" class="form-label">Free Channel ID:</label>
+                            <input type="text" class="form-control" id="free" name="free">
+                        </div>
+                        <div class="mb-3">
+                            <label for="invite" class="form-label">Invite Channel ID:</label>
+                            <input type="text" class="form-control" id="invite" name="invite">
+                        </div>
+                        <div class="mb-3">
+                            <label for="discordLink" class="form-label">Discord Invite Link:</label>
+                            <input type="text" class="form-control" id="discordLink" name="discordLink">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Save Settings</button>
+                    </form>
+                    <div id="settings-status" class="mt-3 text-center"></div>
+                </div>
+
+                <div class="tab-pane fade" id="commands">
+                    <h4>Custom Commands</h4>
+                    <p class="text-center text-muted">Create custom text-based commands for your bot.</p>
+                    <form id="commands-form">
+                        <ul id="commands-list" class="list-group mb-3"></ul>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" id="new-command-name" placeholder="!command-name">
+                            <input type="text" class="form-control" id="new-command-response" placeholder="Response text...">
+                            <button class="btn btn-primary" type="button" id="add-command-btn">Add Command</button>
+                        </div>
+                    </form>
+                    <button class="btn btn-primary w-100" type="button" id="save-commands-btn">Save All Commands</button>
+                    <div id="commands-status" class="mt-3 text-center"></div>
+                </div>
+
+                <div class="tab-pane fade" id="dms">
+                    <h4>Direct Messages Log</h4>
+                    <ul id="dm-log" class="list-group"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabs = document.querySelectorAll('.nav-link');
+            const tabContent = document.querySelectorAll('.tab-pane');
+            const profileForm = document.getElementById('profile-form');
+            const settingsForm = document.getElementById('settings-form');
+            const commandsForm = document.getElementById('commands-form');
+            const profileStatus = document.getElementById('profile-status');
+            const settingsStatus = document.getElementById('settings-status');
+            const commandsStatus = document.getElementById('commands-status');
+            const dmLogList = document.getElementById('dm-log');
+            const commandsList = document.getElementById('commands-list');
+            const addCommandBtn = document.getElementById('add-command-btn');
+            const saveCommandsBtn = document.getElementById('save-commands-btn');
+
+            let dmPollingInterval;
+            let currentSettings = {};
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', async (event) => {
+                    event.preventDefault();
+                    tabContent.forEach(content => content.classList.remove('active', 'show'));
+                    tabs.forEach(t => t.classList.remove('active'));
+
+                    const targetId = tab.getAttribute('data-bs-target').substring(1);
+                    document.getElementById(targetId).classList.add('active', 'show');
+                    tab.classList.add('active');
+
+                    clearInterval(dmPollingInterval);
+
+                    if (targetId === 'dms') {
+                        await fetchDMs();
+                        dmPollingInterval = setInterval(fetchDMs, 3000);
+                    } else if (targetId === 'commands') {
+                        renderCommands();
+                    }
+                });
+            });
+
+            async function loadSettings() {
+                try {
+                    const response = await fetch('/api/settings');
+                    const settings = await response.json();
+                    currentSettings = settings;
+
+                    // Populate forms
+                    document.getElementById('avatarURL').value = currentSettings.avatarURL || '';
+                    document.getElementById('status').value = currentSettings.status || 'online';
+                    document.getElementById('activity').value = currentSettings.activity || '';
+                    document.getElementById('welcomeMessage').value = currentSettings.welcomeMessage || '';
+                    document.getElementById('autoRoleId').value = currentSettings.autoRoleId || '';
+                    document.getElementById('key').value = currentSettings.channelKeywords.key;
+                    document.getElementById('ticket').value = currentSettings.channelKeywords.ticket;
+                    document.getElementById('free').value = currentSettings.channelKeywords.free;
+                    document.getElementById('invite').value = currentSettings.channelKeywords.invite;
+                    document.getElementById('discordLink').value = currentSettings.discordLink;
+
+                    renderCommands();
+
+                } catch (error) {
+                    console.error('Error loading settings:', error);
+                    profileStatus.textContent = 'Failed to load settings.';
+                    profileStatus.className = 'mt-3 text-center text-danger';
+                }
+            }
+
+            function renderCommands() {
+                commandsList.innerHTML = '';
+                currentSettings.customCommands.forEach((cmd, index) => {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                    li.innerHTML = `
+                        <div>
+                            <strong>!${cmd.command}</strong>
+                            <p class="mb-0 text-muted">${cmd.response}</p>
+                        </div>
+                        <button class="btn btn-danger btn-sm" data-index="${index}">Delete</button>
+                    `;
+                    commandsList.appendChild(li);
+                });
+
+                document.querySelectorAll('#commands-list button').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const index = e.target.getAttribute('data-index');
+                        currentSettings.customCommands.splice(index, 1);
+                        renderCommands();
+                    });
+                });
+            }
+
+            addCommandBtn.addEventListener('click', () => {
+                const commandName = document.getElementById('new-command-name').value.trim().toLowerCase();
+                const commandResponse = document.getElementById('new-command-response').value.trim();
+
+                if (commandName && commandResponse) {
+                    currentSettings.customCommands.push({ command: commandName, response: commandResponse });
+                    document.getElementById('new-command-name').value = '';
+                    document.getElementById('new-command-response').value = '';
+                    renderCommands();
+                }
+            });
+
+            saveCommandsBtn.addEventListener('click', async () => {
+                await saveSettings(currentSettings, commandsStatus);
+            });
+
+            async function fetchDMs() {
+                try {
+                    const response = await fetch('/api/dms');
+                    const dms = await response.json();
+                    
+                    dmLogList.innerHTML = '';
+                    if (dms.length === 0) {
+                        dmLogList.innerHTML = '<li class="list-group-item text-center">No DMs received yet.</li>';
+                    } else {
+                        dms.forEach(dm => {
+                            const li = document.createElement('li');
+                            li.className = 'list-group-item';
+                            li.innerHTML = `<strong>${dm.author}</strong>: ${dm.content} <small class="text-muted">(${new Date(dm.timestamp).toLocaleString()})</small>`;
+                            dmLogList.appendChild(li);
+                        });
+                    }
+                } catch (error) {
+                    dmLogList.innerHTML = '<li class="list-group-item text-center text-danger">Failed to load DM log.</li>';
+                    console.error('Error fetching DMs:', error);
+                }
+            }
+            
+            profileForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                currentSettings.avatarURL = document.getElementById('avatarURL').value;
+                currentSettings.status = document.getElementById('status').value;
+                currentSettings.activity = document.getElementById('activity').value;
+                await saveSettings(currentSettings, profileStatus);
+            });
+
+            settingsForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                currentSettings.welcomeMessage = document.getElementById('welcomeMessage').value;
+                currentSettings.autoRoleId = document.getElementById('autoRoleId').value;
+                currentSettings.channelKeywords.key = document.getElementById('key').value;
+                currentSettings.channelKeywords.ticket = document.getElementById('ticket').value;
+                currentSettings.channelKeywords.free = document.getElementById('free').value;
+                currentSettings.channelKeywords.invite = document.getElementById('invite').value;
+                currentSettings.discordLink = document.getElementById('discordLink').value;
+                await saveSettings(currentSettings, settingsStatus);
+            });
+
+            async function saveSettings(settings, statusElement) {
+                try {
+                    const response = await fetch('/api/settings', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(settings)
+                    });
+                    const result = await response.json();
+                    statusElement.textContent = result.message;
+                    statusElement.className = 'mt-3 text-center text-success';
+                } catch (error) {
+                    statusElement.textContent = 'Failed to save settings.';
+                    statusElement.className = 'mt-3 text-center text-danger';
+                }
+            }
+
+            loadSettings();
+        });
+    </script>
+</body>
+</html>

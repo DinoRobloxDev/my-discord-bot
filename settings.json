@@ -1,0 +1,24 @@
+{
+  "status": "online",
+  "activity": "Watching YouTube",
+  "avatarURL": "https://i.imgur.com/your-image-url.jpg",
+  "welcomeMessage": "Welcome to the server, {user}! Enjoy your stay.",
+  "autoRoleId": "YOUR_AUTO_ROLE_ID",
+  "customCommands": [
+    {
+      "command": "rules",
+      "response": "Please check the rules in our <#RULES_CHANNEL_ID> channel!"
+    },
+    {
+      "command": "invite",
+      "response": "Get your invite link here: https://discord.gg/z8E54MCeP3"
+    }
+  ],
+  "channelKeywords": {
+    "key": "1408565392036855910",
+    "ticket": "1408565207273574531",
+    "free": "1408565392036855910",
+    "invite": "1409868057370689587"
+  },
+  "discordLink": "https://discord.gg/z8E54MCeP3"
+}
