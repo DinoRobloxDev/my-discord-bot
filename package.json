@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-  "start": "concurrently \"node index.js\" \"node dashboard.js\"",
+  "start": "npx concurrently \"node index.js\" \"node dashboard.js\"",
   "test": "echo \"Error: no test specified\" && exit 1"
 },
   "keywords": [],
